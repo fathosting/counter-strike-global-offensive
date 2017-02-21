@@ -8,19 +8,14 @@ cache:
 addons:
   apt:
     packages:
-      - ca-certificates
-      - curl
       - lib32gcc1
       - lib32ncurses5
 
 before_install:
-  - env
   - curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf -
   - mkdir Steam && ln -s /home/steam/Steam Steam
   - mkdir .steam && ln -s /home/steam/linux32 .steam/sdk32 && ln -s /home/steam/linux64 .steam/sdk64
-  - ./steamcmd.sh \
-      +login anonymous \
-      +quit
+  - ./steamcmd.sh +login anonymous +quit
 
 install:
   - ./steamcmd.sh \
@@ -28,10 +23,12 @@ install:
       +force_install_dir /home/steam/csgo \
       +app_update 740 validate \
       +quit
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    docker build -t fathosting/csgo:dev .
+  - if [ ! -z "$TRAVIS_TAG" ]; then
+      docker build -t $TRAVIS_REPO_SLUG:latest -t $TRAVIS_REPO_SLUG:$TRAVIS_TAG .
+    else
+      docker build -t $TRAVIS_REPO_SLUG:dev .
     fi
 
 after_success:
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-  - docker push fathosting/csgo;
+  - docker push $TRAVIS_REPO_SLUG;
