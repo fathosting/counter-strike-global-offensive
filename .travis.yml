@@ -4,7 +4,7 @@ language: bash
 
 cache:
   directories:
-    - /home/steam/csgo
+    - $TRAVIS_BUILD_DIR/csgo
 
 addons:
   apt:
@@ -13,6 +13,7 @@ addons:
       - lib32ncurses5
 
 before_install:
+  - df -h
   - curl -sqL https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz | tar zxvf -
 #  - mkdir Steam && ln -s /home/steam/Steam Steam
 #  - mkdir .steam && ln -s /home/steam/linux32 .steam/sdk32 && ln -s /home/steam/linux64 .steam/sdk64
