@@ -1,14 +1,15 @@
 FROM fathosting/steamcmd:latest
 MAINTAINER FAT <contact@fat.sh>
 
+COPY lsyncd.conf.lua /etc/lsyncd/
+COPY docker-entrypoint.sh /usr/local/bin/
+COPY csgo /home/steam/csgo/
+
 RUN ./steamcmd.sh \
       +login anonymous \
       +force_install_dir /home/steam/csgo \
       +app_update 740 validate \
       +quit
-
-COPY lsyncd.conf.lua /etc/lsyncd/
-COPY docker-entrypoint.sh /usr/local/bin/
 
 VOLUME ["/home/steam/backup"]
 EXPOSE 27015
