@@ -1,5 +1,6 @@
 dist: trusty
 sudo: false
+language: bash
 
 cache:
   directories:
@@ -15,13 +16,17 @@ before_install:
   - curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf -
   - mkdir Steam && ln -s /home/steam/Steam Steam
   - mkdir .steam && ln -s /home/steam/linux32 .steam/sdk32 && ln -s /home/steam/linux64 .steam/sdk64
-  - ./steamcmd.sh +login anonymous +quit
+  - >
+    ./steamcmd.sh
+      +login anonymous
+      +quit
 
 install:
-  - ./steamcmd.sh \
-      +login anonymous \
-      +force_install_dir /home/steam/csgo \
-      +app_update 740 validate \
+  - >
+    ./steamcmd.sh
+      +login anonymous
+      +force_install_dir /home/steam/csgo
+      +app_update 740 validate
       +quit
   - if [ ! -z "$TRAVIS_TAG" ]; then
       docker build -t $TRAVIS_REPO_SLUG:latest -t $TRAVIS_REPO_SLUG:$TRAVIS_TAG .
