@@ -27,7 +27,7 @@ pipeline:
   publish:
     image: plugins/docker
     repo: fathosting/csgo
-    tags: [ latest, ${DRONE_BRANCH} ]
+    tags: [ "latest", "${DRONE_BRANCH}" ]
     build_args:
       - APP_NAME=csgo
       - APP_ID=740
