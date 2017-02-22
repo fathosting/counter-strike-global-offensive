@@ -1,18 +1,23 @@
 FROM fathosting/steamcmd:latest
 MAINTAINER FAT <contact@fat.sh>
 
+ARG APP_NAME
+ARG APP_ID
+
 COPY lsyncd.conf.lua /etc/lsyncd/
 COPY docker-entrypoint.sh /usr/local/bin/
-COPY csgo /home/steam/csgo/
+COPY game /home/steam/$APP_NAME/
+
+RUN chown steam:steam /home/steam/$APP_NAME
 
 RUN ./steamcmd.sh \
       +login anonymous \
-      +force_install_dir /home/steam/csgo \
-      +app_update 740 validate \
+      +force_install_dir /home/steam/$APP_NAME \
+      +app_update $APP_ID validate \
       +quit
 
 VOLUME ["/home/steam/backup"]
 EXPOSE 27015
 
 ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["./srcds_run -game csgo -console -usercon +sv_lan 0"]
+CMD ["./srcds_run -game $APP_NAME"]

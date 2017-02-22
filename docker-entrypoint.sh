@@ -20,6 +20,5 @@ lsyncd /etc/lsyncd/lsyncd.conf.lua
 
 cd ${home_dir}
 
-echo ">> Starting CS: GO server..."
-# execute srcds_run as correct user
-exec gosu steam "$@ ${exec_extra_params}"
+echo ">> Starting CS:GO dedicated server..."
+exec gosu steam "$@ -console -usercon +sv_lan 0 ${exec_extra_params}"
