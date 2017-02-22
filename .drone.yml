@@ -14,7 +14,8 @@ pipeline:
       - APP_NAME=csgo
       - APP_ID=740
     commands:
-      - /home/steam/steamcmd.sh +login anonymous +force_install_dir $(pwd)/$APP_NAME +app_update $APP_ID validate +quit
+      - /home/steam/steamcmd.sh +login anonymous +app_info_update 1 +app_info_print $APP_ID +quit
+      - /home/steam/steamcmd.sh +login anonymous +force_install_dir $(pwd)/$APP_NAME +app_update $APP_ID +quit
 
   rebuild-cache:
     image: drillster/drone-volume-cache
