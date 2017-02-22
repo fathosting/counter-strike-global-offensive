@@ -6,7 +6,7 @@ ARG APP_ID
 
 COPY lsyncd.conf.lua /etc/lsyncd/
 COPY docker-entrypoint.sh /usr/local/bin/
-COPY game /home/steam/$APP_NAME/
+COPY $APP_NAME /home/steam/$APP_NAME/
 
 RUN chown steam:steam /home/steam/$APP_NAME
 
