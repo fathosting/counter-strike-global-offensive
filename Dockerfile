@@ -10,12 +10,6 @@ COPY $APP_NAME /home/steam/$APP_NAME/
 
 RUN chown steam:steam /home/steam/$APP_NAME
 
-RUN ./steamcmd.sh \
-      +login anonymous \
-      +force_install_dir /home/steam/$APP_NAME \
-      +app_update $APP_ID validate \
-      +quit
-
 VOLUME ["/home/steam/backup"]
 EXPOSE 27015
 
