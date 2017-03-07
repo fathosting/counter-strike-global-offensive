@@ -4,11 +4,10 @@ MAINTAINER FAT <contact@fat.sh>
 ARG APP_NAME
 ARG APP_ID
 
+ENV APP_NAME=$APP_NAME APP_ID=$APP_ID
+
 COPY lsyncd.conf.lua /etc/lsyncd/
 COPY docker-entrypoint.sh /usr/local/bin/
-COPY $APP_NAME /home/steam/$APP_NAME/
-
-RUN chown steam:steam /home/steam/$APP_NAME
 
 VOLUME ["/home/steam/backup"]
 EXPOSE 27015
