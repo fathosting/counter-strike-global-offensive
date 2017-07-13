@@ -2,7 +2,7 @@
 set -e
 
 game_dir=/home/steam/$APP_NAME
-game_data=${game_dir}/cstrike
+game_data=${game_dir}/cfg
 game_data_backup=/media/user_data
 
 function install_or_update_game {
