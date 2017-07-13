@@ -5,7 +5,7 @@ settings {
 sync {
     default.rsync,
     source = "/home/steam/csgo/cstrike",
-    target = "/home/steam/backup",
+    target = "/media/user_data",
     rsync = {
         archive  = true
     }

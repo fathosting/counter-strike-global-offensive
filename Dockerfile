@@ -9,7 +9,7 @@ ENV APP_NAME=$APP_NAME APP_ID=$APP_ID
 COPY lsyncd.conf.lua /etc/lsyncd/
 COPY docker-entrypoint.sh /usr/local/bin/
 
-VOLUME ["/home/steam/backup"]
+VOLUME ["/media/game_data", "/media/user_data"]
 EXPOSE 27015
 
 ENTRYPOINT ["docker-entrypoint.sh"]

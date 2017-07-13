@@ -1,42 +1,40 @@
 #!/bin/bash
 set -e
 
-home_dir=/home/steam/csgo
-backup_vol=/home/steam/backup
+game_dir=/home/steam/$APP_NAME
+game_data=${game_dir}/cstrike
+game_data_backup=/media/user_data
 
-exec_extra_params=${EXEC_EXTRA_PARAMS:-"+map de_dust2"}
-
-function install_update_game {
-    gosu steam bash -c "./steamcmd.sh +login anonymous +force_install_dir /home/steam/$APP_NAME +app_update $APP_ID validate +quit"
+function install_or_update_game {
+    gosu steam bash -c "./steamcmd.sh +login anonymous +force_install_dir $game_dir +app_update $APP_ID validate +quit"
 }
 
-# install game data on first launch
-if [ ! -z $FIRST_LAUNCH ]; then
-    echo ">> Installing game data..."
-    install_update_game
-fi
-
-# docker volumes are mounted as root
-# chown them to the correct user after mount
-chown steam:steam ${backup_vol}
-
 # restore data from backup if any
-if [ "$(ls -A ${backup_vol})" ]; then
+if [ "$(ls -A ${game_data_backup})" ]; then
     echo ">> Restoring backup data..."
     # sync backup volume -> container
-    rsync -aP ${backup_vol}/ ${home_dir}/cstrike
+    rsync -aP ${game_data_backup}/ ${game_data}
+
+    # fix files permissions after rsync
+    chown -R steam:steam ${game_data}
+fi
+
+# install game data if dest directory doesn't exists
+if [ ! -d ${game_data} ]; then
+    echo ">> Installing game data..."
+    install_or_update_game
 fi
 
 # update game data if asked to
 if [ ! -z $UPDATE_GAME ]; then
     echo ">> Updating game data..."
-    install_update_game
+    install_or_update_game
 fi
 
 # launch lsyncd to sync container -> backup volume
 lsyncd /etc/lsyncd/lsyncd.conf.lua
 
-cd ${home_dir}
+cd ${game_dir}
 
 echo ">> Starting dedicated server..."
-exec gosu steam "$@ -console -usercon +sv_lan 0 ${exec_extra_params}"
+exec gosu steam "$@ -console -usercon +sv_lan 0 ${EXEC_EXTRA_PARAMS}"
